@@ -66,7 +66,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @test
 	 */
 	public function argumentsCanBeRegistered() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', NULL, array(), '', FALSE);
 
 		$name = 'This is a name';
 		$description = 'Example desc';
@@ -83,7 +83,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @expectedException \NamelessCoder\Fluid\Core\ViewHelper\Exception
 	 */
 	public function registeringTheSameArgumentNameAgainThrowsException() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', NULL, array(), '', FALSE);
 
 		$name = 'shortName';
 		$description = 'Example desc';
@@ -98,7 +98,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @test
 	 */
 	public function overrideArgumentOverwritesExistingArgumentDefinition() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', NULL, array(), '', FALSE);
 
 		$name = 'argumentName';
 		$description = 'argument description';
@@ -118,7 +118,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @expectedException \NamelessCoder\Fluid\Core\ViewHelper\Exception
 	 */
 	public function overrideArgumentThrowsExceptionWhenTryingToOverwriteAnNonexistingArgument() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', NULL, array(), '', FALSE);
 
 		$viewHelper->_call('overrideArgument', 'argumentName', 'string', 'description', TRUE);
 	}
@@ -127,7 +127,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @test
 	 */
 	public function prepareArgumentsCallsInitializeArguments() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render', 'initializeArguments'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('initializeArguments'), array(), '', FALSE);
 
 		$viewHelper->expects($this->once())->method('initializeArguments');
 
@@ -138,7 +138,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @test
 	 */
 	public function validateArgumentsCallsPrepareArguments() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render', 'prepareArguments'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('prepareArguments'), array(), '', FALSE);
 
 		$viewHelper->expects($this->once())->method('prepareArguments')->will($this->returnValue(array()));
 
@@ -149,7 +149,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @test
 	 */
 	public function validateArgumentsAcceptsAllObjectsImplemtingArrayAccessAsAnArray() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render', 'prepareArguments'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('prepareArguments'), array(), '', FALSE);
 
 		$viewHelper->setArguments(array('test' => new \ArrayObject));
 		$viewHelper->expects($this->once())->method('prepareArguments')->will($this->returnValue(array('test' => new ArgumentDefinition('test', 'array', FALSE, 'documentation'))));
@@ -160,7 +160,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @test
 	 */
 	public function validateArgumentsCallsTheRightValidators() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render', 'prepareArguments'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('prepareArguments'), array(), '', FALSE);
 
 		$viewHelper->setArguments(array('test' => 'Value of argument'));
 
@@ -176,7 +176,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function validateArgumentsCallsTheRightValidatorsAndThrowsExceptionIfValidationIsWrong() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render', 'prepareArguments'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('prepareArguments'), array(), '', FALSE);
 
 		$viewHelper->setArguments(array('test' => 'test'));
 
@@ -212,7 +212,7 @@ class AbstractViewHelperTest extends UnitTestCase {
 		$renderingContext->setVariableProvider($templateVariableContainer);
 		$renderingContext->injectViewHelperVariableContainer($viewHelperVariableContainer);
 
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('render', 'prepareArguments'), array(), '', FALSE);
+		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('prepareArguments'), array(), '', FALSE);
 
 		$viewHelper->setRenderingContext($renderingContext);
 
@@ -296,16 +296,6 @@ class AbstractViewHelperTest extends UnitTestCase {
 			array(new ArgumentDefinition('test', 'integer', '', TRUE), new \ArrayIterator(array('bar'))),
 			array(new ArgumentDefinition('test', 'object', '', TRUE), 'test'),
 		);
-	}
-
-	/**
-	 * @test
-	 */
-	public function testRenderCallsAndReturnsRenderChildren() {
-		$viewHelper = $this->getAccessibleMock('NamelessCoder\Fluid\Core\ViewHelper\AbstractViewHelper', array('renderChildren'), array(), '', FALSE);
-		$viewHelper->expects($this->once())->method('renderChildren')->willReturn('foobar');
-		$result = $viewHelper->render();
-		$this->assertEquals('foobar', $result);
 	}
 
 	/**

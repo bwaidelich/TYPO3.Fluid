@@ -50,21 +50,6 @@ abstract class AbstractConditionViewHelper extends AbstractViewHelper {
 	}
 
 	/**
-	 * Renders <f:then> child if $condition is true, otherwise renders <f:else> child.
-	 *
-	 * @param boolean $condition View helper condition
-	 * @return string the rendered string
-	 * @api
-	 */
-	public function render() {
-		if ($this->arguments['condition']) {
-			return $this->renderThenChild();
-		} else {
-			return $this->renderElseChild();
-		}
-	}
-
-	/**
 	 * @param array $arguments
 	 * @param \Closure $renderChildrenClosure
 	 * @param RenderingContextInterface $renderingContext

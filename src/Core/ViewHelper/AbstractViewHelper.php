@@ -9,6 +9,7 @@ namespace NamelessCoder\Fluid\Core\ViewHelper;
 use NamelessCoder\Fluid\Core\Compiler\TemplateCompiler;
 use NamelessCoder\Fluid\Core\Parser;
 use NamelessCoder\Fluid\Core\Parser\SyntaxTree\NodeInterface;
+use NamelessCoder\Fluid\Core\Parser\SyntaxTree\TextNode;
 use NamelessCoder\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use NamelessCoder\Fluid\Core\Rendering\RenderingContextInterface;
 use NamelessCoder\Fluid\Core\Variables\VariableProviderInterface;
@@ -236,7 +237,7 @@ abstract class AbstractViewHelper implements ViewHelperInterface {
 	 * @throws Exception
 	 */
 	protected function callRenderMethod() {
-		return $this->render();
+		return call_user_func(array($this, 'render'));
 	}
 
 	/**
@@ -347,16 +348,6 @@ abstract class AbstractViewHelper implements ViewHelperInterface {
 	 * @api
 	 */
 	public function initializeArguments() {
-	}
-
-	/**
-	 * Render method you need to implement for your custom view helper.
-	 *
-	 * @return string rendered string, view helper specific
-	 * @api
-	 */
-	public function render() {
-		return $this->renderChildren();
 	}
 
 	/**
