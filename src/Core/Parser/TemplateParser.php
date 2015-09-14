@@ -343,7 +343,7 @@ class TemplateParser {
 			// The last ViewHelper has to be added first for correct chaining.
 			foreach (array_reverse($matches) as $singleMatch) {
 				if (strlen($singleMatch['ViewHelperArguments']) > 0) {
-					$arguments = $this->recursiveArrayHandler($singleMatch['ViewHelperArguments']);
+					$arguments = $this->postProcessArgumentsForObjectAccessor($this->recursiveArrayHandler($singleMatch['ViewHelperArguments']));
 				} else {
 					$arguments = array();
 				}
@@ -397,6 +397,23 @@ class TemplateParser {
 		foreach ($this->configuration->getInterceptors($interceptionPoint) as $interceptor) {
 			$node = $interceptor->process($node, $interceptionPoint, $state);
 		}
+	}
+
+	/**
+	 * Post process the arguments for the ViewHelpers in the object accessor
+	 * syntax. We need to convert an array into an array of (only) nodes
+	 *
+	 * @param array $arguments The arguments to be processed
+	 * @return array the processed array
+	 * @todo This method should become superfluous once the rest has been refactored, so that this code is not needed.
+	 */
+	protected function postProcessArgumentsForObjectAccessor(array $arguments) {
+		foreach ($arguments as $argumentName => $argumentValue) {
+			if (!($argumentValue instanceof NodeInterface)) {
+				$arguments[$argumentName] = new TextNode((string)$argumentValue);
+			}
+		}
+		return $arguments;
 	}
 
 	/**
